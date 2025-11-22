@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Finance Analytics Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .nav-bar {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            padding: 15px 25px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .nav-bar a {
+            color: white;
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            transition: all 0.2s;
+            font-weight: 500;
+        }
+        
+        .nav-bar a:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        
+        .nav-brand {
+            font-size: 1.3rem;
+            font-weight: 700;
+        }
+        
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        
+        .controls {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        
+        .controls label {
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .controls select, .controls input, .controls button {
+            padding: 10px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            outline: none;
+            transition: all 0.3s;
+        }
+        
+        .controls select:focus, .controls input:focus {
+            border-color: #667eea;
+        }
+        
+        .controls button {
+            background: #667eea;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        
+        .controls button:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(102, 126, 234, 0.3);
+        }
+        
+        .summary-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .card {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 12px rgba(0,0,0,0.15);
+        }
+        
+        .card-title {
+            font-size: 0.9rem;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+        }
+        
+        .card-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 5px;
+        }
+        
+        .card-subtitle {
+            font-size: 0.85rem;
+            color: #999;
+        }
+        
+        .chart-container {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+        
+        .chart-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 20px;
+        }
+        
+        .chart-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        
+        @media (max-width: 968px) {
+            .chart-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        canvas {
+            max-height: 400px;
+        }
+        
+        .table-container {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            overflow-x: auto;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        th {
+            background: #f8f9fa;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+            color: #333;
+            border-bottom: 2px solid #e0e0e0;
+        }
+        
+        td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #f0f0f0;
+            color: #666;
+        }
+        
+        tr:hover {
+            background: #f8f9fa;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+        }
+        
+        .error {
+            background: #fee;
+            color: #c33;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        
+        .badge-receipts {
+            background: #e3f2fd;
+            color: #1976d2;
+        }
+        
+        .badge-amazon {
+            background: #fff3e0;
+            color: #f57c00;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="nav-bar">
+            <a href="/" class="nav-brand">💰 PFM Web</a>
+            <div class="nav-links">
+                <a href="/receipts">📄 Receipts</a>
+                <a href="/analytics" style="background: rgba(255, 255, 255, 0.2);">📊 Analytics</a>
+                <a href="/receipts/new">➕ New Receipt</a>
+            </div>
+        </div>
+        
+        <div class="header">
+            <h1>💰 Finance Analytics Dashboard</h1>
+            <p>Track your spending across receipts and Amazon orders</p>
+        </div>
+        
+        <div class="controls">
+            <label for="days">Time Period:</label>
+            <select id="timePeriod">
+                <option value="7">Last 7 Days</option>
+                <option value="30">Last 30 Days</option>
+                <option value="90">Last 90 Days</option>
+                <option value="180">Last 6 Months</option>
+                <option value="365">Last 365 Days</option>
+                <option value="current-year" selected>Current Year (2025)</option>
+                <option value="last-year">Last Year (2024)</option>
+            </select>
+            
+            <label for="currency">Currency:</label>
+            <select id="currency">
+                <option value="USD" selected>USD ($)</option>
+                <option value="EUR">EUR (€)</option>
+                <option value="GBP">GBP (£)</option>
+                <option value="JPY">JPY (¥)</option>
+                <option value="CAD">CAD (C$)</option>
+                <option value="AUD">AUD (A$)</option>
+                <option value="CNY">CNY (¥)</option>
+                <option value="INR">INR (₹)</option>
+            </select>
+            
+            <button onclick="loadData()">Refresh Data</button>
+        </div>
+        
+        <div class="summary-cards" id="summaryCards">
+            <div class="card">
+                <div class="card-title">Total Spent</div>
+                <div class="card-value" id="totalSpent">$0.00</div>
+                <div class="card-subtitle">Combined spending</div>
+            </div>
+            <div class="card">
+                <div class="card-title">Transactions</div>
+                <div class="card-value" id="totalTransactions">0</div>
+                <div class="card-subtitle">Total purchases</div>
+            </div>
+            <div class="card">
+                <div class="card-title">Items</div>
+                <div class="card-value" id="totalItems">0</div>
+                <div class="card-subtitle">Products purchased</div>
+            </div>
+            <div class="card">
+                <div class="card-title">Avg Per Transaction</div>
+                <div class="card-value" id="avgTransaction">$0.00</div>
+                <div class="card-subtitle">Average spending</div>
+            </div>
+        </div>
+        
+        <div class="chart-grid">
+            <div class="chart-container">
+                <div class="chart-title">📊 Spending by Category</div>
+                <canvas id="categoryChart"></canvas>
+            </div>
+            
+            <div class="chart-container">
+                <div class="chart-title">📈 Spending by Source</div>
+                <canvas id="sourceChart"></canvas>
+            </div>
+        </div>
+        
+        <div class="chart-container">
+            <div class="chart-title">📅 Spending Trend (Last 30 Days)</div>
+            <canvas id="trendChart"></canvas>
+        </div>
+        
+        <div class="table-container">
+            <div class="chart-title">📋 Category Breakdown</div>
+            <table id="categoryTable">
+                <thead>
+                    <tr>
+                        <th>Category</th>
+                        <th>Total Spent</th>
+                        <th>Percentage</th>
+                        <th>Items</th>
+                        <th>Transactions</th>
+                        <th>Avg/Item</th>
+                    </tr>
+                </thead>
+                <tbody id="categoryTableBody">
+                    <tr><td colspan="6" class="loading">Loading data...</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+    <script>
+        let categoryChart, sourceChart, trendChart;
+        let exchangeRates = {};
+        let baseCurrency = 'USD';
+        
+        // Exchange rates (USD base)
+        const defaultRates = {
+            'USD': 1,
+            'EUR': 0.92,
+            'GBP': 0.79,
+            'JPY': 149.50,
+            'CAD': 1.39,
+            'AUD': 1.54,
+            'CNY': 7.24,
+            'INR': 83.12
+        };
+        
+        function getCurrencySymbol(currency) {
+            const symbols = {
+                'USD': '$',
+                'EUR': '€',
+                'GBP': '£',
+                'JPY': '¥',
+                'CAD': 'C$',
+                'AUD': 'A$',
+                'CNY': '¥',
+                'INR': '₹'
+            };
+            return symbols[currency] || currency;
+        }
+        
+        function convertCurrency(amount, toCurrency) {
+            if (toCurrency === 'USD') return amount;
+            return amount * (defaultRates[toCurrency] || 1);
+        }
+        
+        function formatCurrency(amount) {
+            const currency = document.getElementById('currency')?.value || 'USD';
+            const convertedAmount = convertCurrency(amount, currency);
+            const locale = currency === 'EUR' ? 'de-DE' : 
+                          currency === 'GBP' ? 'en-GB' : 
+                          currency === 'JPY' ? 'ja-JP' :
+                          currency === 'CNY' ? 'zh-CN' :
+                          currency === 'INR' ? 'en-IN' : 'en-US';
+            
+            return new Intl.NumberFormat(locale, {
+                style: 'currency',
+                currency: currency,
+                minimumFractionDigits: currency === 'JPY' ? 0 : 2,
+                maximumFractionDigits: currency === 'JPY' ? 0 : 2
+            }).format(convertedAmount);
+        }
+        
+        function formatNumber(num) {
+            return new Intl.NumberFormat('en-US').format(num);
+        }
+        
+        function getDateRange(period) {
+            const now = new Date();
+            let startDate, endDate = now.toISOString().split('T')[0];
+            
+            if (period === 'current-year') {
+                startDate = `${now.getFullYear()}-01-01`;
+            } else if (period === 'last-year') {
+                startDate = `${now.getFullYear() - 1}-01-01`;
+                endDate = `${now.getFullYear() - 1}-12-31`;
+            } else {
+                // For day-based periods, just use days parameter
+                return { useDays: true, days: parseInt(period) };
+            }
+            
+            return { useDays: false, start_date: startDate, end_date: endDate };
+        }
+        
+        async function loadData() {
+            const period = document.getElementById('timePeriod').value;
+            const currency = document.getElementById('currency').value;
+            const dateRange = getDateRange(period);
+            
+            let queryParams = `currency=${currency}`;
+            if (dateRange.useDays) {
+                queryParams += `&days=${dateRange.days}`;
+            } else {
+                queryParams += `&start_date=${dateRange.start_date}&end_date=${dateRange.end_date}`;
+            }
+            
+            try {
+                // Load summary
+                const summaryRes = await fetch(`/api/analytics/summary?${queryParams}`);
+                const summary = await summaryRes.json();
+                updateSummaryCards(summary);
+                
+                // Load category breakdown
+                const categoriesRes = await fetch(`/api/analytics/categories?${queryParams}`);
+                const categories = await categoriesRes.json();
+                updateCategoryChart(categories);
+                updateCategoryTable(categories);
+                
+                // Load source comparison
+                const sourcesRes = await fetch(`/api/analytics/compare-sources?${queryParams}`);
+                const sources = await sourcesRes.json();
+                updateSourceChart(sources);
+                
+                // Load time series - use full selected period
+                const timeSeriesRes = await fetch(`/api/analytics/time-series?${queryParams}&group_by=day`);
+                const timeSeries = await timeSeriesRes.json();
+                updateTrendChart(timeSeries);
+                
+            } catch (error) {
+                console.error('Error loading data:', error);
+                showError('Failed to load analytics data. Please check if the server is running.');
+            }
+        }
+        
+        function updateSummaryCards(data) {
+            document.getElementById('totalSpent').textContent = formatCurrency(data.total_amount || 0);
+            document.getElementById('totalTransactions').textContent = formatNumber(data.transaction_count || 0);
+            document.getElementById('totalItems').textContent = formatNumber(data.item_count || 0);
+            document.getElementById('avgTransaction').textContent = formatCurrency(data.avg_transaction || 0);
+        }
+        
+        function updateCategoryChart(data) {
+            const categories = data.categories || [];
+            const ctx = document.getElementById('categoryChart').getContext('2d');
+            
+            if (categoryChart) {
+                categoryChart.destroy();
+            }
+            
+            if (categories.length === 0) {
+                return;
+            }
+            
+            const colors = [
+                '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF',
+                '#FF9F40', '#FF6384', '#C9CBCF', '#4BC0C0', '#FF6384'
+            ];
+            
+            categoryChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: categories.map(c => c.category_name),
+                    datasets: [{
+                        data: categories.map(c => c.total_spent),
+                        backgroundColor: colors.slice(0, categories.length),
+                        borderWidth: 2,
+                        borderColor: '#fff'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const label = context.label || '';
+                                    const value = formatCurrency(context.parsed);
+                                    const percent = context.dataset.data[context.dataIndex];
+                                    return `${label}: ${value}`;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+        
+        function updateSourceChart(data) {
+            const ctx = document.getElementById('sourceChart').getContext('2d');
+            
+            if (sourceChart) {
+                sourceChart.destroy();
+            }
+            
+            const receiptsTotal = data.receipts?.total || 0;
+            const amazonTotal = data.amazon?.total || 0;
+            
+            sourceChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Receipts', 'Amazon'],
+                    datasets: [{
+                        label: 'Spending',
+                        data: [receiptsTotal, amazonTotal],
+                        backgroundColor: ['#1976d2', '#f57c00'],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return formatCurrency(context.parsed.y);
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return formatCurrency(value);
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+        
+        function updateTrendChart(response) {
+            const data = response.data || [];
+            const ctx = document.getElementById('trendChart').getContext('2d');
+            
+            if (trendChart) {
+                trendChart.destroy();
+            }
+            
+            if (data.length === 0) {
+                return;
+            }
+            
+            trendChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: data.map(d => d.period),
+                    datasets: [{
+                        label: 'Daily Spending',
+                        data: data.map(d => d.total_spent),
+                        borderColor: '#667eea',
+                        backgroundColor: 'rgba(102, 126, 234, 0.1)',
+                        fill: true,
+                        tension: 0.4,
+                        pointRadius: 3,
+                        pointHoverRadius: 6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return formatCurrency(context.parsed.y);
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return formatCurrency(value);
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+        
+        function updateCategoryTable(data) {
+            const categories = data.categories || [];
+            const tbody = document.getElementById('categoryTableBody');
+            
+            if (categories.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" class="loading">No data available</td></tr>';
+                return;
+            }
+            
+            tbody.innerHTML = categories.map(cat => `
+                <tr>
+                    <td><strong>${cat.category_name}</strong></td>
+                    <td>${formatCurrency(cat.total_spent)}</td>
+                    <td>${cat.percentage.toFixed(1)}%</td>
+                    <td>${formatNumber(cat.item_count)}</td>
+                    <td>${formatNumber(cat.transaction_count)}</td>
+                    <td>${formatCurrency(cat.avg_item_price)}</td>
+                </tr>
+            `).join('');
+        }
+        
+        function showError(message) {
+            const container = document.querySelector('.container');
+            const errorDiv = document.createElement('div');
+            errorDiv.className = 'error';
+            errorDiv.textContent = message;
+            container.insertBefore(errorDiv, container.firstChild);
+        }
+        
+        // Load data on page load
+        document.addEventListener('DOMContentLoaded', loadData);
+    </script>
+</body>
+</html>

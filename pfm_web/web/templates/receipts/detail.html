@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+{% block title %}Receipt #{{ receipt.id }} · PFM Web{% endblock %}
+
+{% block content %}
+<section class="section">
+  <a class="back-link" href="{{ url_for('web.receipts_list') }}">← Back to receipts</a>
+  <div style="display: flex; justify-content: space-between; align-items: center;">
+    <h2>{{ receipt.vendor_name or 'Receipt' }}</h2>
+    <div>
+      <a class="btn" href="{{ url_for('web.receipt_edit', receipt_id=receipt.id) }}">Edit</a>
+      <form method="POST" action="{{ url_for('web.receipt_delete', receipt_id=receipt.id) }}" style="display: inline;" onsubmit="return confirm('Are you sure you want to delete this receipt?');">
+        <button type="submit" class="btn btn-danger">Delete</button>
+      </form>
+    </div>
+  </div>
+  <div class="receipt-meta">
+    <div>
+      <span class="label">Date</span>
+      <span>
+        {% if receipt.issued_at %}
+          {{ receipt.issued_at.strftime('%Y-%m-%d %H:%M') }}
+        {% else %}
+          --
+        {% endif %}
+      </span>
+    </div>
+    {% if receipt.vendor_address %}
+    <div>
+      <span class="label">Address</span>
+      <span>{{ receipt.vendor_address }}</span>
+    </div>
+    {% endif %}
+    <div>
+      <span class="label">Total</span>
+      <span>{{ receipt.total_amount|currency(receipt.currency) }}</span>
+    </div>
+    <div>
+      <span class="label">Items</span>
+      <span>{{ receipt.items|length }}</span>
+    </div>
+    {% if receipt.processing_engine %}
+    <div>
+      <span class="label">Processed By</span>
+      <span>{{ receipt.processing_engine }}</span>
+    </div>
+    {% endif %}
+    {% if receipt.confidence_score %}
+    <div>
+      <span class="label">Confidence</span>
+      <span>{{ (receipt.confidence_score * 100) | round(1) }}%</span>
+    </div>
+    {% endif %}
+  </div>
+
+  {% if receipt.raw_payload %}
+  <details class="raw-payload">
+    <summary>Show raw payload</summary>
+    <pre>{{ receipt.raw_payload }}</pre>
+  </details>
+  {% endif %}
+
+  <h3>Line Items</h3>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Qty</th>
+        <th>Unit Price</th>
+        <th>Total</th>
+        <th>Category</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for item in receipt.items %}
+      <tr>
+        <td>{{ item.item_name }}</td>
+        <td>{{ item.quantity|round(2) }}</td>
+        <td>{{ item.unit_price|currency(receipt.currency) }}</td>
+        <td>{{ item.total_price|currency(receipt.currency) }}</td>
+        <td>{{ item.category.name if item.category else '--' }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</section>
+{% endblock %}

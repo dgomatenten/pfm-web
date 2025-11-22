@@ -1,0 +1,50 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+dist/
+build/
+*.egg
+
+# Virtual Environment
+pfm/
+venv/
+env/
+ENV/
+.venv
+
+# Flask
+instance/
+.env
+*.db
+*.sqlite
+*.sqlite3
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+.DS_Store?
+._*
+Thumbs.db
+
+# Reports and exports
+reports/*.csv
+reports/*.json
+reports/*.pdf
+*.json.backup
+
+# Data files
+data/*.csv
+!data/.gitkeep
+
+# Logs
+*.log

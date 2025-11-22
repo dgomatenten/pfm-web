@@ -1,0 +1,357 @@
+{% extends "base.html" %}
+{% block title %}Add Receipt · PFM Web{% endblock %}
+
+{% block content %}
+<section class="section">
+  <div class="page-header">
+    <h2>Add Receipt Manually</h2>
+    <a href="{{ url_for('web.receipts_list') }}" class="btn btn-secondary">← Back to Receipts</a>
+  </div>
+  
+  <form method="POST" action="{{ url_for('web.receipt_create') }}" class="receipt-form">
+    <div class="form-section">
+      <h3>Basic Information</h3>
+      
+      <div class="form-group">
+        <label for="vendor_name">Vendor Name *</label>
+        <input type="text" id="vendor_name" name="vendor_name" required 
+               placeholder="e.g., Whole Foods, Amazon, Starbucks">
+      </div>
+      
+      <div class="form-group">
+        <label for="vendor_address">Vendor Address</label>
+        <input type="text" id="vendor_address" name="vendor_address" 
+               placeholder="Store address (optional)">
+      </div>
+      
+      <div class="form-row">
+        <div class="form-group">
+          <label for="issued_at">Receipt Date *</label>
+          <input type="date" id="issued_at" name="issued_at" required 
+                 value="{{ today }}">
+        </div>
+        
+        <div class="form-group">
+          <label for="receipt_number">Receipt Number</label>
+          <input type="text" id="receipt_number" name="receipt_number" 
+                 placeholder="Receipt # (optional)">
+        </div>
+      </div>
+    </div>
+    
+    <div class="form-section">
+      <h3>Payment Details</h3>
+      
+      <div class="form-row">
+        <div class="form-group">
+          <label for="total_amount">Total Amount *</label>
+          <input type="number" id="total_amount" name="total_amount" 
+                 step="0.01" min="0" required placeholder="0.00">
+        </div>
+        
+        <div class="form-group">
+          <label for="currency">Currency *</label>
+          <select id="currency" name="currency" required>
+            <option value="USD">USD ($)</option>
+            <option value="JPY" selected>JPY (¥)</option>
+            <option value="EUR">EUR (€)</option>
+            <option value="GBP">GBP (£)</option>
+            <option value="CAD">CAD (C$)</option>
+            <option value="AUD">AUD (A$)</option>
+            <option value="CNY">CNY (¥)</option>
+            <option value="INR">INR (₹)</option>
+          </select>
+        </div>
+      </div>
+      
+      <div class="form-row">
+        <div class="form-group">
+          <label for="tax_amount">Tax Amount</label>
+          <input type="number" id="tax_amount" name="tax_amount" 
+                 step="0.01" min="0" placeholder="0.00">
+        </div>
+        
+        <div class="form-group">
+          <label for="payment_method">Payment Method</label>
+          <select id="payment_method" name="payment_method">
+            <option value="">-- Select --</option>
+            <option value="credit_card">Credit Card</option>
+            <option value="debit_card">Debit Card</option>
+            <option value="cash">Cash</option>
+            <option value="mobile_payment">Mobile Payment</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    
+    <div class="form-section">
+      <h3>Categorization</h3>
+      
+      <div class="form-row">
+        <div class="form-group">
+          <label for="category_id">Category</label>
+          <select id="category_id" name="category_id">
+            <option value="">-- Select Category --</option>
+            {% for category in categories %}
+              <option value="{{ category.id }}">{{ category.name }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        
+        <div class="form-group">
+          <label for="shop_id">Shop</label>
+          <select id="shop_id" name="shop_id">
+            <option value="">-- Select Shop --</option>
+            {% for shop in shops %}
+              <option value="{{ shop.id }}">{{ shop.name }}</option>
+            {% endfor %}
+          </select>
+        </div>
+      </div>
+    </div>
+    
+    <div class="form-section" id="items-section">
+      <h3>Line Items <span style="font-size: 0.9em; color: #666;">(optional)</span></h3>
+      
+      <div id="items-container">
+        <div class="line-item">
+          <div class="form-row">
+            <div class="form-group" style="flex: 2;">
+              <label>Item Name</label>
+              <input type="text" name="item_name[]" placeholder="Item description">
+            </div>
+            <div class="form-group" style="flex: 1;">
+              <label>Quantity</label>
+              <input type="number" name="item_quantity[]" step="0.01" min="0" value="1" placeholder="1">
+            </div>
+            <div class="form-group" style="flex: 1;">
+              <label>Unit Price</label>
+              <input type="number" name="item_price[]" step="0.01" min="0" placeholder="0.00">
+            </div>
+            <div class="form-group" style="flex: 1;">
+              <label>Total</label>
+              <input type="number" name="item_total[]" step="0.01" min="0" placeholder="0.00" readonly>
+            </div>
+            <div class="form-group" style="flex: 0 0 auto;">
+              <label>&nbsp;</label>
+              <button type="button" class="btn btn-small btn-danger remove-item" style="display: none;">Remove</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <button type="button" id="add-item" class="btn btn-secondary">+ Add Line Item</button>
+    </div>
+    
+    <div class="form-actions">
+      <button type="submit" class="btn btn-primary">Save Receipt</button>
+      <a href="{{ url_for('web.receipts_list') }}" class="btn">Cancel</a>
+    </div>
+  </form>
+</section>
+
+<style>
+.receipt-form {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.form-section {
+  background: #f9f9f9;
+  padding: 20px;
+  margin-bottom: 20px;
+  border-radius: 8px;
+  border: 1px solid #e0e0e0;
+}
+
+.form-section h3 {
+  margin-top: 0;
+  margin-bottom: 15px;
+  color: #333;
+  font-size: 1.1em;
+}
+
+.form-group {
+  margin-bottom: 15px;
+  flex: 1;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: 500;
+  color: #555;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+  box-sizing: border-box;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  outline: none;
+  border-color: #6c5ce7;
+  box-shadow: 0 0 0 3px rgba(108, 92, 231, 0.1);
+}
+
+.form-row {
+  display: flex;
+  gap: 15px;
+  align-items: flex-start;
+}
+
+.line-item {
+  background: white;
+  padding: 15px;
+  margin-bottom: 10px;
+  border-radius: 6px;
+  border: 1px solid #e0e0e0;
+}
+
+.form-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-start;
+  margin-top: 30px;
+}
+
+.btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  text-decoration: none;
+  display: inline-block;
+  transition: all 0.2s;
+}
+
+.btn-primary {
+  background: #6c5ce7;
+  color: white;
+}
+
+.btn-primary:hover {
+  background: #5f4dd4;
+}
+
+.btn-secondary {
+  background: #74b9ff;
+  color: white;
+}
+
+.btn-secondary:hover {
+  background: #5da3e8;
+}
+
+.btn-danger {
+  background: #ff6b6b;
+  color: white;
+}
+
+.btn-danger:hover {
+  background: #ee5a52;
+}
+
+.btn-small {
+  padding: 6px 12px;
+  font-size: 13px;
+}
+
+.alert {
+  padding: 12px 16px;
+  margin-bottom: 20px;
+  border-radius: 6px;
+  font-weight: 500;
+}
+
+.alert-success {
+  background: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+}
+
+.alert-error {
+  background: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const container = document.getElementById('items-container');
+  const addButton = document.getElementById('add-item');
+  let itemCount = 1;
+  
+  // Add item button
+  addButton.addEventListener('click', function() {
+    const newItem = container.querySelector('.line-item').cloneNode(true);
+    
+    // Clear input values
+    newItem.querySelectorAll('input').forEach(input => {
+      if (input.name === 'item_quantity[]') {
+        input.value = '1';
+      } else {
+        input.value = '';
+      }
+    });
+    
+    // Show remove button
+    newItem.querySelector('.remove-item').style.display = 'inline-block';
+    
+    container.appendChild(newItem);
+    itemCount++;
+    
+    // Show remove buttons on all items if more than one
+    if (itemCount > 1) {
+      container.querySelectorAll('.remove-item').forEach(btn => {
+        btn.style.display = 'inline-block';
+      });
+    }
+  });
+  
+  // Remove item (delegated)
+  container.addEventListener('click', function(e) {
+    if (e.target.classList.contains('remove-item')) {
+      e.target.closest('.line-item').remove();
+      itemCount--;
+      
+      // Hide remove buttons if only one item left
+      if (itemCount === 1) {
+        container.querySelectorAll('.remove-item').forEach(btn => {
+          btn.style.display = 'none';
+        });
+      }
+    }
+  });
+  
+  // Auto-calculate item total
+  container.addEventListener('input', function(e) {
+    const item = e.target.closest('.line-item');
+    if (!item) return;
+    
+    const quantity = parseFloat(item.querySelector('input[name="item_quantity[]"]').value) || 0;
+    const price = parseFloat(item.querySelector('input[name="item_price[]"]').value) || 0;
+    const totalInput = item.querySelector('input[name="item_total[]"]');
+    
+    totalInput.value = (quantity * price).toFixed(2);
+  });
+  
+  // Set today's date as default
+  const dateInput = document.getElementById('issued_at');
+  if (!dateInput.value) {
+    const today = new Date().toISOString().split('T')[0];
+    dateInput.value = today;
+  }
+});
+</script>
+{% endblock %}
