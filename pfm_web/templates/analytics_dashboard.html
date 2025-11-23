@@ -276,12 +276,14 @@
         <div class="controls">
             <label for="days">Time Period:</label>
             <select id="timePeriod">
+                <option value="current-month" selected>Current Month</option>
+                <option value="last-month">Last Month</option>
                 <option value="7">Last 7 Days</option>
                 <option value="30">Last 30 Days</option>
                 <option value="90">Last 90 Days</option>
                 <option value="180">Last 6 Months</option>
                 <option value="365">Last 365 Days</option>
-                <option value="current-year" selected>Current Year (2025)</option>
+                <option value="current-year">Current Year (2025)</option>
                 <option value="last-year">Last Year (2024)</option>
             </select>
             
@@ -421,7 +423,14 @@
             const now = new Date();
             let startDate, endDate = now.toISOString().split('T')[0];
             
-            if (period === 'current-year') {
+            if (period === 'current-month') {
+                startDate = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-01`;
+            } else if (period === 'last-month') {
+                const lastMonth = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+                const lastMonthEnd = new Date(now.getFullYear(), now.getMonth(), 0);
+                startDate = `${lastMonth.getFullYear()}-${String(lastMonth.getMonth() + 1).padStart(2, '0')}-01`;
+                endDate = `${lastMonthEnd.getFullYear()}-${String(lastMonthEnd.getMonth() + 1).padStart(2, '0')}-${String(lastMonthEnd.getDate()).padStart(2, '0')}`;
+            } else if (period === 'current-year') {
                 startDate = `${now.getFullYear()}-01-01`;
             } else if (period === 'last-year') {
                 startDate = `${now.getFullYear() - 1}-01-01`;
