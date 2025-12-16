@@ -1,0 +1,253 @@
+{% extends "base.html" %}
+{% block title %}Order {{ order.order_number }} · PFM Web{% endblock %}
+
+{% block content %}
+<section class="section">
+  <div class="page-header">
+    <div>
+      <h2>Amazon Order Details</h2>
+      <p class="page-description">Order {{ order.order_number }}</p>
+    </div>
+    <div>
+      <a href="{{ url_for('web.amazon_orders_list') }}" class="btn">← Back to Orders</a>
+    </div>
+  </div>
+
+  <div class="detail-grid">
+    <div class="detail-card">
+      <h3>Order Information</h3>
+      <table class="info-table">
+        <tr>
+          <th>Order Number:</th>
+          <td>{{ order.order_number }}</td>
+        </tr>
+        <tr>
+          <th>Order Date:</th>
+          <td>{{ order.order_date.strftime('%Y-%m-%d %H:%M') if order.order_date else '--' }}</td>
+        </tr>
+        <tr>
+          <th>Total Amount:</th>
+          <td class="amount">{{ order.total_amount|currency(order.currency) }}</td>
+        </tr>
+        <tr>
+          <th>Payment Method:</th>
+          <td>{{ order.payment_method or '--' }}</td>
+        </tr>
+        <tr>
+          <th>Shipment Status:</th>
+          <td><span class="status-badge">{{ order.shipment_status or 'Unknown' }}</span></td>
+        </tr>
+        {% if order.receipt %}
+        <tr>
+          <th>Linked Receipt:</th>
+          <td><a href="{{ url_for('web.receipt_detail', receipt_id=order.receipt.id) }}">View Receipt #{{ order.receipt.id }}</a></td>
+        </tr>
+        {% endif %}
+      </table>
+    </div>
+  </div>
+
+  {% if order.items %}
+  <div class="items-section">
+    <h3>Order Items ({{ order.items|length }})</h3>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Item Name</th>
+          <th>ASIN</th>
+          <th>Seller</th>
+          <th>Category</th>
+          <th>Quantity</th>
+          <th>Unit Price</th>
+          <th>Total Price</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in order.items %}
+        <tr>
+          <td>{{ item.item_name }}</td>
+          <td class="asin-cell">{{ item.asin or '--' }}</td>
+          <td>{{ item.seller or '--' }}</td>
+          <td>
+            {% if item.category %}
+              <span class="category-badge">{{ item.category.name }}</span>
+            {% else %}
+              --
+            {% endif %}
+          </td>
+          <td>{{ item.quantity }}</td>
+          <td>{{ item.unit_price|currency(order.currency) }}</td>
+          <td>{{ item.total_price|currency(order.currency) }}</td>
+        </tr>
+        {% endfor %}
+        <tr class="total-row">
+          <td colspan="6" style="text-align: right; font-weight: bold;">Total:</td>
+          <td style="font-weight: bold;">{{ order.total_amount|currency(order.currency) }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  {% endif %}
+
+  <div class="actions-bar">
+    <form method="POST" action="{{ url_for('web.amazon_order_delete', order_id=order.id) }}" onsubmit="return confirm('Are you sure you want to delete this Amazon order?');">
+      <button type="submit" class="btn btn-danger">🗑️ Delete Order</button>
+    </form>
+  </div>
+</section>
+
+<style>
+.detail-grid {
+  display: grid;
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.detail-card {
+  background: white;
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 24px;
+}
+
+.detail-card h3 {
+  margin-top: 0;
+  margin-bottom: 20px;
+  color: #1f2933;
+  font-size: 1.3rem;
+}
+
+.info-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.info-table th {
+  text-align: left;
+  padding: 12px 16px;
+  background: #f8f9fa;
+  font-weight: 600;
+  color: #495057;
+  width: 200px;
+}
+
+.info-table td {
+  padding: 12px 16px;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.info-table tr:last-child td {
+  border-bottom: none;
+}
+
+.amount {
+  font-size: 1.2em;
+  font-weight: 700;
+  color: #6c5ce7;
+}
+
+.items-section {
+  background: white;
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 20px;
+}
+
+.items-section h3 {
+  margin-top: 0;
+  margin-bottom: 20px;
+  color: #1f2933;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 15px;
+}
+
+.table th {
+  background: #6c5ce7;
+  color: white;
+  padding: 12px;
+  text-align: left;
+  font-weight: 600;
+}
+
+.table td {
+  padding: 12px;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.table tbody tr:hover {
+  background: #f8f9fa;
+}
+
+.total-row {
+  background: #f8f9fa;
+  font-weight: bold;
+}
+
+.total-row td {
+  border-top: 2px solid #6c5ce7;
+  border-bottom: none;
+}
+
+.actions-bar {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  padding: 20px 0;
+}
+
+.btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  text-decoration: none;
+  display: inline-block;
+  transition: all 0.2s;
+  background: #6c5ce7;
+  color: white;
+}
+
+.btn:hover {
+  background: #5f4dd4;
+}
+
+.btn-danger {
+  background: #ff6b6b;
+  color: white;
+}
+
+.btn-danger:hover {
+  background: #ee5a52;
+}
+
+.status-badge {
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 0.85em;
+  font-weight: 600;
+  background: #e3f2fd;
+  color: #1976d2;
+}
+
+.category-badge {
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 0.85em;
+  font-weight: 600;
+  background: #f3e5f5;
+  color: #7b1fa2;
+}
+
+.asin-cell {
+  font-family: 'Courier New', monospace;
+  font-size: 0.85em;
+  color: #495057;
+}
+</style>
+{% endblock %}

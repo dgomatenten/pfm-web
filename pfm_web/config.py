@@ -15,6 +15,11 @@ class BaseConfig:
     SQLALCHEMY_ENGINE_OPTIONS = {}
     SQLALCHEMY_ECHO = bool(int(os.getenv("SQLALCHEMY_ECHO", "0")))
     LOG_LEVEL = os.getenv("LOG_LEVEL", "INFO")
+    
+    # Gmail API Configuration
+    GMAIL_CLIENT_ID = os.getenv("GMAIL_CLIENT_ID")
+    GMAIL_CLIENT_SECRET = os.getenv("GMAIL_CLIENT_SECRET")
+    GMAIL_TOKEN_FILE = os.getenv("GMAIL_TOKEN_FILE", "data/gmail_token.pickle")
 
     @staticmethod
     def init_app(app) -> None:

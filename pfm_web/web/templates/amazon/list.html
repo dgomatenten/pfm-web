@@ -1,19 +1,18 @@
 {% extends "base.html" %}
-{% block title %}Receipts · PFM Web{% endblock %}
+{% block title %}Amazon Orders · PFM Web{% endblock %}
 
 {% block content %}
 <section class="section">
   <div class="page-header">
     <div>
-      <h2>Receipts</h2>
-      <p class="page-description">View and manage all your receipts</p>
+      <h2>Amazon Orders</h2>
+      <p class="page-description">View and manage all your Amazon orders</p>
     </div>
-    <a href="{{ url_for('web.receipt_create') }}" class="btn btn-primary">➕ New Receipt</a>
   </div>
   
   <div class="filter-bar">
     <label for="user-filter">Filter by User:</label>
-    <select id="user-filter" class="filter-select" onchange="window.location.href='{{ url_for('web.receipts_list') }}?user_id=' + this.value">
+    <select id="user-filter" class="filter-select" onchange="window.location.href='{{ url_for('web.amazon_orders_list') }}?user_id=' + this.value">
       <option value="all" {% if selected_user_id == 'all' %}selected{% endif %}>All Users</option>
       {% for user in users %}
       <option value="{{ user.id }}" {% if selected_user_id|string == user.id|string %}selected{% endif %}>
@@ -23,18 +22,18 @@
     </select>
   </div>
   
-  {% if receipts %}
+  {% if orders %}
     <div class="stats-bar">
       <div class="stat-card">
-        <div class="stat-value">{{ receipts|length }}</div>
-        <div class="stat-label">Receipts Shown</div>
+        <div class="stat-value">{{ orders|length }}</div>
+        <div class="stat-label">Orders Shown</div>
       </div>
       <div class="stat-card">
-        <div class="stat-value">{{ '%0.2f'|format(receipts|sum(attribute='total_amount')) }}</div>
+        <div class="stat-value">{{ '%0.2f'|format(orders|sum(attribute='total_amount')) }}</div>
         <div class="stat-label">Total Amount</div>
       </div>
       <div class="stat-card">
-        <div class="stat-value">{{ receipts|map(attribute='items')|map('length')|sum }}</div>
+        <div class="stat-value">{{ orders|map(attribute='items')|map('length')|sum }}</div>
         <div class="stat-label">Total Items</div>
       </div>
     </div>
@@ -42,34 +41,35 @@
     <table class="table">
       <thead>
         <tr>
-          <th>Date</th>
-          <th>Vendor</th>
+          <th>Order Date</th>
+          <th>Order Number</th>
           <th>User</th>
-          <th>Address</th>
           <th>Total</th>
           <th>Items</th>
+          <th>Status</th>
           <th></th>
         </tr>
       </thead>
       <tbody>
-        {% for receipt in receipts %}
+        {% for order in orders %}
         <tr>
           <td>
-            {% if receipt.issued_at %}
-              {{ receipt.issued_at.strftime('%Y-%m-%d') }}
+            {% if order.order_date %}
+              {{ order.order_date.strftime('%Y-%m-%d') }}
             {% else %}
               --
             {% endif %}
           </td>
-          <td>{{ receipt.vendor_name or (receipt.shop.name if receipt.shop else '--') }}</td>
-          <td class="user-cell">{{ receipt.user.email if receipt.user else '--' }}</td>
-          <td>{{ receipt.vendor_address or (receipt.shop.address if receipt.shop else '--') }}</td>
-          <td>{{ receipt.total_amount|currency(receipt.currency) }}</td>
-          <td>{{ receipt.items|length }}</td>
+          <td class="order-number">{{ order.order_number }}</td>
+          <td class="user-cell">{{ order.user.email if order.user else '--' }}</td>
+          <td>{{ order.total_amount|currency(order.currency) }}</td>
+          <td>{{ order.items|length }}</td>
           <td>
-            <a class="btn" href="{{ url_for('web.receipt_detail', receipt_id=receipt.id) }}">View</a>
-            <a class="btn" href="{{ url_for('web.receipt_edit', receipt_id=receipt.id) }}">Edit</a>
-            <form method="POST" action="{{ url_for('web.receipt_delete', receipt_id=receipt.id) }}" style="display: inline;" onsubmit="return confirm('Are you sure you want to delete this receipt?');">
+            <span class="status-badge">{{ order.shipment_status or 'Unknown' }}</span>
+          </td>
+          <td>
+            <a class="btn" href="{{ url_for('web.amazon_order_detail', order_id=order.id) }}">View</a>
+            <form method="POST" action="{{ url_for('web.amazon_order_delete', order_id=order.id) }}" style="display: inline;" onsubmit="return confirm('Are you sure you want to delete this Amazon order?');">
               <button type="submit" class="btn btn-danger">Delete</button>
             </form>
           </td>
@@ -78,7 +78,7 @@
       </tbody>
     </table>
   {% else %}
-    <p>No receipts imported yet. <a href="{{ url_for('web.receipt_create') }}">Create your first receipt</a></p>
+    <p>No Amazon orders imported yet.</p>
   {% endif %}
 </section>
 
@@ -206,6 +206,21 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.order-number {
+  font-family: 'Courier New', monospace;
+  font-size: 0.85em;
+  color: #495057;
+}
+
+.status-badge {
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 0.85em;
+  font-weight: 600;
+  background: #e3f2fd;
+  color: #1976d2;
 }
 </style>
 {% endblock %}

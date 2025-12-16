@@ -1,0 +1,392 @@
+{% extends "base.html" %}
+{% block title %}All Spending · PFM Web{% endblock %}
+
+{% block content %}
+<section class="section">
+  <div class="page-header">
+    <div>
+      <h2>All Spending</h2>
+      <p class="page-description">Unified view of receipts and Amazon orders</p>
+    </div>
+  </div>
+  
+  <div class="filter-bar">
+    <label for="user-filter">Filter by User:</label>
+    <select id="user-filter" class="filter-select" onchange="updateFilters()">
+      <option value="all" {% if selected_user_id == 'all' %}selected{% endif %}>All Users</option>
+      {% for user in users %}
+      <option value="{{ user.id }}" {% if selected_user_id|string == user.id|string %}selected{% endif %}>
+        {{ user.email }}
+      </option>
+      {% endfor %}
+    </select>
+    
+    <label for="source-filter">Source:</label>
+    <select id="source-filter" class="filter-select" onchange="updateFilters()">
+      <option value="all" {% if selected_source == 'all' %}selected{% endif %}>All Sources</option>
+      <option value="receipt" {% if selected_source == 'receipt' %}selected{% endif %}>📄 Receipts</option>
+      <option value="amazon" {% if selected_source == 'amazon' %}selected{% endif %}>📦 Amazon</option>
+    </select>
+    
+    <label for="currency-filter">Currency:</label>
+    <select id="currency-filter" class="filter-select" onchange="updateFilters()">
+      <option value="all" {% if selected_currency == 'all' %}selected{% endif %}>All Currencies</option>
+      {% for currency in currencies %}
+      <option value="{{ currency }}" {% if selected_currency == currency %}selected{% endif %}>{{ currency }}</option>
+      {% endfor %}
+    </select>
+  </div>
+  
+  {% if summary %}
+  <div class="stats-grid">
+    <div class="stat-card total">
+      <div class="stat-icon">💰</div>
+      <div class="stat-content">
+        <div class="stat-value">{{ '%.2f'|format(summary.total_spending) }}</div>
+        <div class="stat-label">Total Spending</div>
+      </div>
+    </div>
+    
+    <div class="stat-card receipts">
+      <div class="stat-icon">📄</div>
+      <div class="stat-content">
+        <div class="stat-value">{{ summary.receipt_count }}</div>
+        <div class="stat-label">Receipts</div>
+        <div class="stat-sublabel">{{ '%.2f'|format(summary.receipt_spending) }}</div>
+      </div>
+    </div>
+    
+    <div class="stat-card amazon">
+      <div class="stat-icon">📦</div>
+      <div class="stat-content">
+        <div class="stat-value">{{ summary.amazon_count }}</div>
+        <div class="stat-label">Amazon Orders</div>
+        <div class="stat-sublabel">{{ '%.2f'|format(summary.amazon_spending) }}</div>
+      </div>
+    </div>
+    
+    <div class="stat-card average">
+      <div class="stat-icon">📊</div>
+      <div class="stat-content">
+        <div class="stat-value">{{ '%.2f'|format(summary.average_transaction) }}</div>
+        <div class="stat-label">Avg Transaction</div>
+        <div class="stat-sublabel">{{ summary.total_transactions }} total</div>
+      </div>
+    </div>
+  </div>
+  {% endif %}
+  
+  {% if items %}
+    <table class="table unified-table">
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Source</th>
+          <th>ID</th>
+          <th>Vendor</th>
+          <th>User</th>
+          <th>Category</th>
+          <th>Items</th>
+          <th>Total</th>
+          <th>Status</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in items %}
+        <tr class="source-{{ item.source }}">
+          <td class="date-cell">
+            {{ item.date.strftime('%Y-%m-%d') }}<br>
+            <span class="time">{{ item.date.strftime('%H:%M') }}</span>
+          </td>
+          <td class="source-cell">
+            <span class="source-badge source-{{ item.source }}">
+              {{ item.source_icon }} {{ item.source|capitalize }}
+            </span>
+          </td>
+          <td class="id-cell">{{ item.display_id }}</td>
+          <td class="vendor-cell">{{ item.vendor }}</td>
+          <td class="user-cell">{{ item.user_email or '--' }}</td>
+          <td class="category-cell">
+            {% if item.category %}
+              <span class="category-badge">{{ item.category }}</span>
+            {% else %}
+              --
+            {% endif %}
+          </td>
+          <td class="count-cell">{{ item.item_count }}</td>
+          <td class="amount-cell">{{ item.total_amount|currency(item.currency) }}</td>
+          <td class="status-cell">
+            {% if item.status %}
+              <span class="status-badge">{{ item.status }}</span>
+            {% endif %}
+          </td>
+          <td class="actions-cell">
+            {% if item.source == 'receipt' %}
+              <a class="btn btn-sm" href="{{ url_for('web.receipt_detail', receipt_id=item.id.split('_')[1]) }}">View</a>
+            {% else %}
+              <a class="btn btn-sm" href="{{ url_for('web.amazon_order_detail', order_id=item.id.split('_')[1]) }}">View</a>
+            {% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <p>No spending data found.</p>
+  {% endif %}
+</section>
+
+<script>
+function updateFilters() {
+  const userId = document.getElementById('user-filter').value;
+  const source = document.getElementById('source-filter').value;
+  const currency = document.getElementById('currency-filter').value;
+  const url = new URL(window.location.href);
+  url.searchParams.set('user_id', userId);
+  url.searchParams.set('source', source);
+  url.searchParams.set('currency', currency);
+  window.location.href = url.toString();
+}
+</script>
+
+<style>
+.filter-bar {
+  background: #f8f9fa;
+  padding: 15px 20px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.filter-bar label {
+  font-weight: 600;
+  color: #495057;
+}
+
+.filter-select {
+  padding: 8px 12px;
+  border: 2px solid #dee2e6;
+  border-radius: 6px;
+  font-size: 14px;
+  background: white;
+  cursor: pointer;
+  min-width: 200px;
+  transition: border-color 0.2s;
+}
+
+.filter-select:hover {
+  border-color: #6c5ce7;
+}
+
+.filter-select:focus {
+  outline: none;
+  border-color: #6c5ce7;
+  box-shadow: 0 0 0 3px rgba(108, 92, 231, 0.1);
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 15px;
+  margin-bottom: 25px;
+}
+
+.stat-card {
+  background: white;
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.stat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.stat-card.total {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+}
+
+.stat-card.receipts {
+  border-color: #4CAF50;
+}
+
+.stat-card.amazon {
+  border-color: #FF9800;
+}
+
+.stat-card.average {
+  border-color: #2196F3;
+}
+
+.stat-icon {
+  font-size: 2.5rem;
+}
+
+.stat-content {
+  flex: 1;
+}
+
+.stat-value {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-bottom: 5px;
+}
+
+.stat-label {
+  font-size: 0.9rem;
+  opacity: 0.8;
+  font-weight: 500;
+}
+
+.stat-sublabel {
+  font-size: 0.85rem;
+  opacity: 0.7;
+  margin-top: 2px;
+}
+
+.unified-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.unified-table thead th {
+  background: #6c5ce7;
+  color: white;
+  padding: 12px;
+  text-align: left;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.unified-table tbody td {
+  padding: 12px;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.unified-table tbody tr:hover {
+  background: #f8f9fa;
+}
+
+.source-receipt {
+  border-left: 3px solid #4CAF50;
+}
+
+.source-amazon {
+  border-left: 3px solid #FF9800;
+}
+
+.date-cell {
+  font-weight: 600;
+  color: #495057;
+}
+
+.date-cell .time {
+  font-size: 0.85em;
+  color: #6c757d;
+  font-weight: normal;
+}
+
+.source-badge {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 0.85em;
+  font-weight: 600;
+}
+
+.source-badge.source-receipt {
+  background: #e8f5e9;
+  color: #2e7d32;
+}
+
+.source-badge.source-amazon {
+  background: #fff3e0;
+  color: #e65100;
+}
+
+.id-cell {
+  font-family: 'Courier New', monospace;
+  font-size: 0.9em;
+  color: #6c757d;
+}
+
+.vendor-cell {
+  font-weight: 500;
+}
+
+.user-cell {
+  font-size: 0.9em;
+  color: #6c757d;
+  max-width: 180px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.category-badge {
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 0.85em;
+  font-weight: 600;
+  background: #f3e5f5;
+  color: #7b1fa2;
+}
+
+.count-cell {
+  text-align: center;
+  font-weight: 500;
+}
+
+.amount-cell {
+  font-weight: 700;
+  color: #6c5ce7;
+  text-align: right;
+}
+
+.status-badge {
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 0.85em;
+  font-weight: 600;
+  background: #e3f2fd;
+  color: #1976d2;
+}
+
+.btn {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
+  text-decoration: none;
+  display: inline-block;
+  transition: all 0.2s;
+  background: #6c5ce7;
+  color: white;
+}
+
+.btn:hover {
+  background: #5f4dd4;
+}
+
+.btn-sm {
+  padding: 4px 10px;
+  font-size: 12px;
+}
+</style>
+{% endblock %}

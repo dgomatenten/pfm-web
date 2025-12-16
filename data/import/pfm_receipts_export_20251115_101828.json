@@ -1,0 +1,1078 @@
+{
+  "export_info": {
+    "app_name": "Personal Finance Manager",
+    "version": "1.0.0",
+    "export_date": "2025-11-15T10:18:28.192868",
+    "total_receipts": 7,
+    "date_range": {
+      "start": null,
+      "end": null
+    },
+    "currency_filter": null
+  },
+  "receipts": [
+    {
+      "id": 1,
+      "shop_name": "Trader Joe's",
+      "date": "2025-11-09T00:00:00.000",
+      "total_amount": 35.37,
+      "currency": "USD",
+      "tax_amount": null,
+      "payment_method": null,
+      "receipt_number": null,
+      "location": null,
+      "raw_ocr_text": "Processed with Gemini Vision API - Language: en",
+      "processing_engine": "Gemini Vision (EN)",
+      "confidence_score": 0.95,
+      "language_detected": "en",
+      "items": [
+        {
+          "id": 1,
+          "name": "Mandarin Bag Josie's 2LB",
+          "quantity": 1.0,
+          "unit_price": 3.49,
+          "total_price": 3.49,
+          "category": "grocery"
+        },
+        {
+          "id": 2,
+          "name": "Mandarin Bag Josie's 2LB",
+          "quantity": 1.0,
+          "unit_price": 3.49,
+          "total_price": 3.49,
+          "category": "grocery"
+        },
+        {
+          "id": 3,
+          "name": "Pineapple Each",
+          "quantity": 1.0,
+          "unit_price": 2.99,
+          "total_price": 2.99,
+          "category": "grocery"
+        },
+        {
+          "id": 4,
+          "name": "A-Tomatoes Roma on the V",
+          "quantity": 1.0,
+          "unit_price": 2.99,
+          "total_price": 2.99,
+          "category": "grocery"
+        },
+        {
+          "id": 5,
+          "name": "Yogurt Greek Passion Gua",
+          "quantity": 1.0,
+          "unit_price": 0.99,
+          "total_price": 0.99,
+          "category": "grocery"
+        },
+        {
+          "id": 6,
+          "name": "Yogurt Greek Blueberry N",
+          "quantity": 1.0,
+          "unit_price": 0.99,
+          "total_price": 0.99,
+          "category": "grocery"
+        },
+        {
+          "id": 7,
+          "name": "Yogurt Greek Plain 5.3 0",
+          "quantity": 1.0,
+          "unit_price": 0.99,
+          "total_price": 0.99,
+          "category": "grocery"
+        },
+        {
+          "id": 8,
+          "name": "Yogurt Greek Blueberry N",
+          "quantity": 1.0,
+          "unit_price": 0.99,
+          "total_price": 0.99,
+          "category": "grocery"
+        },
+        {
+          "id": 9,
+          "name": "Yogurt Greek Plain 5.3 0",
+          "quantity": 1.0,
+          "unit_price": 0.99,
+          "total_price": 0.99,
+          "category": "grocery"
+        },
+        {
+          "id": 10,
+          "name": "Yogurt Greek Passion Gua",
+          "quantity": 1.0,
+          "unit_price": 0.99,
+          "total_price": 0.99,
+          "category": "grocery"
+        },
+        {
+          "id": 11,
+          "name": "Macadamias Dry Roasted &",
+          "quantity": 1.0,
+          "unit_price": 7.99,
+          "total_price": 7.99,
+          "category": "grocery"
+        },
+        {
+          "id": 12,
+          "name": "Pasta Sauce Org Marinara",
+          "quantity": 1.0,
+          "unit_price": 3.49,
+          "total_price": 3.49,
+          "category": "grocery"
+        },
+        {
+          "id": 13,
+          "name": "R-Blueberries Really Big",
+          "quantity": 1.0,
+          "unit_price": 4.99,
+          "total_price": 4.99,
+          "category": "grocery"
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "shop_name": "Costco",
+      "date": "2025-10-05T00:00:00.000",
+      "total_amount": 177.04,
+      "currency": "USD",
+      "tax_amount": null,
+      "payment_method": null,
+      "receipt_number": null,
+      "location": null,
+      "raw_ocr_text": "Processed with Gemini Vision API - Language: en",
+      "processing_engine": "Gemini Vision (EN)",
+      "confidence_score": 0.95,
+      "language_detected": "en",
+      "items": [
+        {
+          "id": 36,
+          "name": "VINTGE SETZR",
+          "quantity": 1.0,
+          "unit_price": 8.99,
+          "total_price": 8.99,
+          "category": "beverage"
+        },
+        {
+          "id": 37,
+          "name": "SAN PELL MIN",
+          "quantity": 1.0,
+          "unit_price": 21.99,
+          "total_price": 21.99,
+          "category": "beverage"
+        },
+        {
+          "id": 38,
+          "name": "SAN PELL MIN",
+          "quantity": 1.0,
+          "unit_price": 21.99,
+          "total_price": 21.99,
+          "category": "beverage"
+        },
+        {
+          "id": 39,
+          "name": "HAAGEN DAZS",
+          "quantity": 1.0,
+          "unit_price": 13.99,
+          "total_price": 13.99,
+          "category": "food"
+        },
+        {
+          "id": 40,
+          "name": "STRAWBERRIES",
+          "quantity": 1.0,
+          "unit_price": 5.49,
+          "total_price": 5.49,
+          "category": "food"
+        },
+        {
+          "id": 41,
+          "name": "STRAWBERRIES",
+          "quantity": 1.0,
+          "unit_price": 5.49,
+          "total_price": 5.49,
+          "category": "food"
+        },
+        {
+          "id": 42,
+          "name": "SOCK SALMON",
+          "quantity": 1.0,
+          "unit_price": 22.24,
+          "total_price": 22.24,
+          "category": "food"
+        },
+        {
+          "id": 43,
+          "name": "BNLS BREAST",
+          "quantity": 1.0,
+          "unit_price": 25.18,
+          "total_price": 25.18,
+          "category": "food"
+        },
+        {
+          "id": 44,
+          "name": "SEAWEED SALD",
+          "quantity": 1.0,
+          "unit_price": 10.99,
+          "total_price": 10.99,
+          "category": "food"
+        },
+        {
+          "id": 45,
+          "name": "RASPBERRIES",
+          "quantity": 1.0,
+          "unit_price": 4.79,
+          "total_price": 4.79,
+          "category": "food"
+        },
+        {
+          "id": 46,
+          "name": "BLACKBERRIES",
+          "quantity": 1.0,
+          "unit_price": 4.99,
+          "total_price": 4.99,
+          "category": "food"
+        },
+        {
+          "id": 47,
+          "name": "BANANAS",
+          "quantity": 1.0,
+          "unit_price": 1.49,
+          "total_price": 1.49,
+          "category": "food"
+        },
+        {
+          "id": 48,
+          "name": "LINDT GOLD",
+          "quantity": 1.0,
+          "unit_price": 16.99,
+          "total_price": 16.99,
+          "category": "food"
+        },
+        {
+          "id": 49,
+          "name": "LINDT GOLD",
+          "quantity": 1.0,
+          "unit_price": 16.99,
+          "total_price": 16.99,
+          "category": "food"
+        },
+        {
+          "id": 50,
+          "name": "PINEAPPLE",
+          "quantity": 1.0,
+          "unit_price": 2.99,
+          "total_price": 2.99,
+          "category": "food"
+        },
+        {
+          "id": 51,
+          "name": "AVOCADOS",
+          "quantity": 1.0,
+          "unit_price": 5.99,
+          "total_price": 5.99,
+          "category": "food"
+        },
+        {
+          "id": 52,
+          "name": "OG CARROT6LB",
+          "quantity": 1.0,
+          "unit_price": 5.89,
+          "total_price": 5.89,
+          "category": "food"
+        },
+        {
+          "id": 53,
+          "name": "POTATOES",
+          "quantity": 1.0,
+          "unit_price": 5.99,
+          "total_price": 5.99,
+          "category": "food"
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "shop_name": "H Mart",
+      "date": "2025-10-03T00:00:00.000",
+      "total_amount": 77.98,
+      "currency": "USD",
+      "tax_amount": null,
+      "payment_method": null,
+      "receipt_number": null,
+      "location": null,
+      "raw_ocr_text": "Processed with Gemini Vision API - Language: en",
+      "processing_engine": "Gemini Vision (EN)",
+      "confidence_score": 0.95,
+      "language_detected": "en",
+      "items": [
+        {
+          "id": 54,
+          "name": "WHITE CABBAGE",
+          "quantity": 4.0,
+          "unit_price": 0.79,
+          "total_price": 3.16,
+          "category": "grocery"
+        },
+        {
+          "id": 55,
+          "name": "NAPA CABBAGE",
+          "quantity": 2.99,
+          "unit_price": 0.79,
+          "total_price": 2.36,
+          "category": "grocery"
+        },
+        {
+          "id": 56,
+          "name": "FF BRW EGGS LG",
+          "quantity": 1.0,
+          "unit_price": 3.99,
+          "total_price": 3.99,
+          "category": "grocery"
+        },
+        {
+          "id": 57,
+          "name": "CJ KOREAN BBQ SAUC",
+          "quantity": 1.0,
+          "unit_price": 4.99,
+          "total_price": 4.49,
+          "category": "grocery"
+        },
+        {
+          "id": 58,
+          "name": "CHK CUT DRUMSTICK",
+          "quantity": 1.0,
+          "unit_price": 6.99,
+          "total_price": 7.68,
+          "category": "food"
+        },
+        {
+          "id": 59,
+          "name": "OYSTER MUSHROOM",
+          "quantity": 1.0,
+          "unit_price": 11.99,
+          "total_price": 3.69,
+          "category": "grocery"
+        },
+        {
+          "id": 60,
+          "name": "OYSTER MUSHROOM",
+          "quantity": 1.0,
+          "unit_price": 11.99,
+          "total_price": 3.04,
+          "category": "grocery"
+        },
+        {
+          "id": 61,
+          "name": "GLASSLOCK 5 SET",
+          "quantity": 1.0,
+          "unit_price": 19.99,
+          "total_price": 12.99,
+          "category": "grocery"
+        },
+        {
+          "id": 62,
+          "name": "MRC NAMA YAKISOBA",
+          "quantity": 1.0,
+          "unit_price": 2.5,
+          "total_price": 2.5,
+          "category": "food"
+        },
+        {
+          "id": 63,
+          "name": "MRC NAMA YAKISOBA",
+          "quantity": 1.0,
+          "unit_price": 2.5,
+          "total_price": 2.5,
+          "category": "food"
+        },
+        {
+          "id": 64,
+          "name": "WOOD EAR MUSHROOM",
+          "quantity": 1.0,
+          "unit_price": 4.99,
+          "total_price": 2.49,
+          "category": "grocery"
+        },
+        {
+          "id": 65,
+          "name": "GRAPE TOMATOES",
+          "quantity": 1.0,
+          "unit_price": 3.99,
+          "total_price": 1.99,
+          "category": "grocery"
+        },
+        {
+          "id": 66,
+          "name": "KOREAN PEAR 9S",
+          "quantity": 1.0,
+          "unit_price": 34.99,
+          "total_price": 29.99,
+          "category": "grocery"
+        },
+        {
+          "id": 67,
+          "name": "HD CARAMEL CON CUP",
+          "quantity": 1.0,
+          "unit_price": 34.99,
+          "total_price": 1.99,
+          "category": "food"
+        },
+        {
+          "id": 68,
+          "name": "ORO OTUBE CHEESE 8",
+          "quantity": 1.0,
+          "unit_price": 12.99,
+          "total_price": 8.99,
+          "category": "food"
+        },
+        {
+          "id": 69,
+          "name": "BURDOCK (GOBO)",
+          "quantity": 1.0,
+          "unit_price": 12.99,
+          "total_price": 6.98,
+          "category": "grocery"
+        },
+        {
+          "id": 70,
+          "name": "CILANTRO",
+          "quantity": 1.0,
+          "unit_price": 1.99,
+          "total_price": 1.99,
+          "category": "grocery"
+        },
+        {
+          "id": 71,
+          "name": "CHINESE EGGPLANT",
+          "quantity": 1.0,
+          "unit_price": 2.99,
+          "total_price": 2.32,
+          "category": "grocery"
+        },
+        {
+          "id": 72,
+          "name": "GOKU KOTSUBU M3",
+          "quantity": 1.0,
+          "unit_price": 2.99,
+          "total_price": 1.99,
+          "category": "grocery"
+        },
+        {
+          "id": 73,
+          "name": "GREEN ONION",
+          "quantity": 3.0,
+          "unit_price": 1.99,
+          "total_price": 1.99,
+          "category": "grocery"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "shop_name": "Costco Wholesale",
+      "date": "2025-09-20T00:00:00.000",
+      "total_amount": 182.68,
+      "currency": "USD",
+      "tax_amount": null,
+      "payment_method": null,
+      "receipt_number": null,
+      "location": null,
+      "raw_ocr_text": "Processed with Gemini Vision API - Language: en",
+      "processing_engine": "Gemini Vision (EN)",
+      "confidence_score": 0.95,
+      "language_detected": "en",
+      "items": [
+        {
+          "id": 18,
+          "name": "VINTGE SETZR",
+          "quantity": 1.0,
+          "unit_price": 8.99,
+          "total_price": 8.99,
+          "category": "grocery"
+        },
+        {
+          "id": 19,
+          "name": "CHARMIN RD*",
+          "quantity": 1.0,
+          "unit_price": 30.49,
+          "total_price": 30.49,
+          "category": "retail"
+        },
+        {
+          "id": 20,
+          "name": "#3427647",
+          "quantity": 1.0,
+          "unit_price": 6.5,
+          "total_price": 6.5,
+          "category": "retail"
+        },
+        {
+          "id": 21,
+          "name": "PINEAPPLE",
+          "quantity": 1.0,
+          "unit_price": 2.99,
+          "total_price": 2.99,
+          "category": "food"
+        },
+        {
+          "id": 22,
+          "name": "PRAWN HACAO",
+          "quantity": 1.0,
+          "unit_price": 15.49,
+          "total_price": 15.49,
+          "category": "food"
+        },
+        {
+          "id": 23,
+          "name": "/1116045",
+          "quantity": 1.0,
+          "unit_price": 4.0,
+          "total_price": 4.0,
+          "category": "other"
+        },
+        {
+          "id": 24,
+          "name": "PRAWN HACAO",
+          "quantity": 1.0,
+          "unit_price": 15.49,
+          "total_price": 15.49,
+          "category": "food"
+        },
+        {
+          "id": 25,
+          "name": "/1116045",
+          "quantity": 1.0,
+          "unit_price": 4.0,
+          "total_price": 4.0,
+          "category": "other"
+        },
+        {
+          "id": 26,
+          "name": "PRAWN HACAO",
+          "quantity": 1.0,
+          "unit_price": 15.49,
+          "total_price": 15.49,
+          "category": "food"
+        },
+        {
+          "id": 27,
+          "name": "/1116045",
+          "quantity": 1.0,
+          "unit_price": 4.0,
+          "total_price": 4.0,
+          "category": "other"
+        },
+        {
+          "id": 28,
+          "name": "GRAPE TOMATO",
+          "quantity": 1.0,
+          "unit_price": 5.69,
+          "total_price": 5.69,
+          "category": "food"
+        },
+        {
+          "id": 29,
+          "name": "AVOCADOS",
+          "quantity": 1.0,
+          "unit_price": 6.89,
+          "total_price": 6.89,
+          "category": "food"
+        },
+        {
+          "id": 30,
+          "name": "LEMONS",
+          "quantity": 1.0,
+          "unit_price": 7.99,
+          "total_price": 7.99,
+          "category": "food"
+        },
+        {
+          "id": 31,
+          "name": "VENUS",
+          "quantity": 1.0,
+          "unit_price": 34.99,
+          "total_price": 34.99,
+          "category": "retail"
+        },
+        {
+          "id": 32,
+          "name": "GILLETTE",
+          "quantity": 1.0,
+          "unit_price": 49.99,
+          "total_price": 49.99,
+          "category": "retail"
+        },
+        {
+          "id": 33,
+          "name": "#1587186",
+          "quantity": 1.0,
+          "unit_price": 10.0,
+          "total_price": 10.0,
+          "category": "retail"
+        },
+        {
+          "id": 34,
+          "name": "CREST CMPLTE",
+          "quantity": 1.0,
+          "unit_price": 14.99,
+          "total_price": 14.99,
+          "category": "retail"
+        },
+        {
+          "id": 35,
+          "name": "/1504495",
+          "quantity": 1.0,
+          "unit_price": 4.0,
+          "total_price": 4.0,
+          "category": "other"
+        }
+      ]
+    },
+    {
+      "id": 13,
+      "shop_name": "クリエイト",
+      "date": "2025-08-26T00:00:00.000",
+      "total_amount": 6279.0,
+      "currency": "JPY",
+      "tax_amount": null,
+      "payment_method": null,
+      "receipt_number": null,
+      "location": null,
+      "raw_ocr_text": "Processed with Gemini Vision API - Language: ja",
+      "processing_engine": "Gemini Vision (Japanese)",
+      "confidence_score": 0.95,
+      "language_detected": "ja",
+      "items": [
+        {
+          "id": 178,
+          "name": "フィーノプレミアムタッチ",
+          "quantity": 1.0,
+          "unit_price": 698.0,
+          "total_price": 698.0,
+          "category": "other"
+        },
+        {
+          "id": 179,
+          "name": "味の素 ほんだしこんぶだ",
+          "quantity": 1.0,
+          "unit_price": 138.0,
+          "total_price": 138.0,
+          "category": "food"
+        },
+        {
+          "id": 180,
+          "name": "味の素ほんだし小袋32g",
+          "quantity": 1.0,
+          "unit_price": 138.0,
+          "total_price": 138.0,
+          "category": "food"
+        },
+        {
+          "id": 181,
+          "name": "創味だしのきいたまろや",
+          "quantity": 1.0,
+          "unit_price": 268.0,
+          "total_price": 268.0,
+          "category": "food"
+        },
+        {
+          "id": 182,
+          "name": "宝製菓 塩バタかまん",
+          "quantity": 1.0,
+          "unit_price": 159.0,
+          "total_price": 159.0,
+          "category": "food"
+        },
+        {
+          "id": 183,
+          "name": "東ハト ポテコうましお味",
+          "quantity": 1.0,
+          "unit_price": 99.0,
+          "total_price": 99.0,
+          "category": "food"
+        },
+        {
+          "id": 184,
+          "name": "マコーミック ごまドレッ",
+          "quantity": 1.0,
+          "unit_price": 124.0,
+          "total_price": 124.0,
+          "category": "food"
+        },
+        {
+          "id": 185,
+          "name": "味の素 ほんだし60G瓶",
+          "quantity": 1.0,
+          "unit_price": 198.0,
+          "total_price": 198.0,
+          "category": "food"
+        },
+        {
+          "id": 186,
+          "name": "モンデリーズ オレオ ビ",
+          "quantity": 1.0,
+          "unit_price": 148.0,
+          "total_price": 148.0,
+          "category": "food"
+        },
+        {
+          "id": 187,
+          "name": "カルビー じゃがりこサラ",
+          "quantity": 1.0,
+          "unit_price": 109.0,
+          "total_price": 109.0,
+          "category": "food"
+        },
+        {
+          "id": 188,
+          "name": "カルビー じゃがりこじゃがバ",
+          "quantity": 3.0,
+          "unit_price": 109.0,
+          "total_price": 327.0,
+          "category": "food"
+        },
+        {
+          "id": 189,
+          "name": "明治 マカダミアチョコレ",
+          "quantity": 1.0,
+          "unit_price": 198.0,
+          "total_price": 198.0,
+          "category": "food"
+        },
+        {
+          "id": 190,
+          "name": "森永製菓 小枝ミルク",
+          "quantity": 4.0,
+          "unit_price": 218.0,
+          "total_price": 218.0,
+          "category": "food"
+        },
+        {
+          "id": 191,
+          "name": "ニッコー スティックゼリー",
+          "quantity": 4.0,
+          "unit_price": 68.0,
+          "total_price": 272.0,
+          "category": "food"
+        },
+        {
+          "id": 192,
+          "name": "東ハト ポテコうましお味",
+          "quantity": 2.0,
+          "unit_price": 48.0,
+          "total_price": 240.0,
+          "category": "food"
+        },
+        {
+          "id": 193,
+          "name": "M01まとめ値引",
+          "quantity": 1.0,
+          "unit_price": 42.0,
+          "total_price": -42.0,
+          "category": "other"
+        },
+        {
+          "id": 194,
+          "name": "カルビー じゃがりこチーズ",
+          "quantity": 4.0,
+          "unit_price": 109.0,
+          "total_price": 436.0,
+          "category": "food"
+        },
+        {
+          "id": 195,
+          "name": "ウイード サンリオガムボール",
+          "quantity": 4.0,
+          "unit_price": 189.0,
+          "total_price": 756.0,
+          "category": "food"
+        },
+        {
+          "id": 196,
+          "name": "Dr. デンリスト 山切カット",
+          "quantity": 2.0,
+          "unit_price": 65.0,
+          "total_price": 130.0,
+          "category": "other"
+        },
+        {
+          "id": 197,
+          "name": "リーチキッズ ポケモンはえか",
+          "quantity": 9.0,
+          "unit_price": 98.0,
+          "total_price": 882.0,
+          "category": "other"
+        },
+        {
+          "id": 198,
+          "name": "Dr. デンリスト 山切カ",
+          "quantity": 1.0,
+          "unit_price": 65.0,
+          "total_price": 65.0,
+          "category": "other"
+        },
+        {
+          "id": 199,
+          "name": "森永製菓 ラムネ 29g",
+          "quantity": 3.0,
+          "unit_price": 69.0,
+          "total_price": 207.0,
+          "category": "food"
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "shop_name": "Trader Joe's",
+      "date": "2024-01-04T00:00:00.000",
+      "total_amount": 58.48,
+      "currency": "USD",
+      "tax_amount": null,
+      "payment_method": null,
+      "receipt_number": null,
+      "location": null,
+      "raw_ocr_text": "Processed with Gemini Vision API - Language: en",
+      "processing_engine": "Gemini Vision (EN)",
+      "confidence_score": 0.95,
+      "language_detected": "en",
+      "items": [
+        {
+          "id": 74,
+          "name": "MILK QUART WHOLE",
+          "quantity": 1.0,
+          "unit_price": 1.69,
+          "total_price": 1.69,
+          "category": "grocery"
+        },
+        {
+          "id": 75,
+          "name": "PASTA PENNE RIGATE",
+          "quantity": 1.0,
+          "unit_price": 0.99,
+          "total_price": 0.99,
+          "category": "grocery"
+        },
+        {
+          "id": 76,
+          "name": "PASTA SPAGHETTI",
+          "quantity": 1.0,
+          "unit_price": 0.99,
+          "total_price": 0.99,
+          "category": "grocery"
+        },
+        {
+          "id": 77,
+          "name": "PASTA LINGUINE",
+          "quantity": 1.0,
+          "unit_price": 0.99,
+          "total_price": 0.99,
+          "category": "grocery"
+        },
+        {
+          "id": 78,
+          "name": "DRY RNS OREGON HAZELNUTS",
+          "quantity": 1.0,
+          "unit_price": 7.99,
+          "total_price": 7.99,
+          "category": "grocery"
+        },
+        {
+          "id": 79,
+          "name": "MACADAMIAS DRY ROASTED &",
+          "quantity": 1.0,
+          "unit_price": 7.99,
+          "total_price": 7.99,
+          "category": "grocery"
+        },
+        {
+          "id": 80,
+          "name": "TORTILLA ALMOND FLOUR 6",
+          "quantity": 1.0,
+          "unit_price": 3.69,
+          "total_price": 3.69,
+          "category": "grocery"
+        },
+        {
+          "id": 81,
+          "name": "SHREDDED MOZZARELLA",
+          "quantity": 1.0,
+          "unit_price": 4.49,
+          "total_price": 4.49,
+          "category": "grocery"
+        },
+        {
+          "id": 82,
+          "name": "MANDARIN BAG JOSIE'S 2LB",
+          "quantity": 1.0,
+          "unit_price": 3.49,
+          "total_price": 3.49,
+          "category": "grocery"
+        },
+        {
+          "id": 83,
+          "name": "ORG KETCHUP",
+          "quantity": 1.0,
+          "unit_price": 2.49,
+          "total_price": 2.49,
+          "category": "grocery"
+        },
+        {
+          "id": 84,
+          "name": "HOL SPICE GROUND NUTMEG",
+          "quantity": 1.0,
+          "unit_price": 2.99,
+          "total_price": 2.99,
+          "category": "grocery"
+        },
+        {
+          "id": 85,
+          "name": "YOGURT GREEK PASSION GUA",
+          "quantity": 1.0,
+          "unit_price": 0.99,
+          "total_price": 0.99,
+          "category": "grocery"
+        },
+        {
+          "id": 86,
+          "name": "YOGURT GREEK PLAIN 5.3 0",
+          "quantity": 1.0,
+          "unit_price": 0.99,
+          "total_price": 0.99,
+          "category": "grocery"
+        },
+        {
+          "id": 87,
+          "name": "WHIPPED CREAM CHEESE",
+          "quantity": 1.0,
+          "unit_price": 2.49,
+          "total_price": 2.49,
+          "category": "grocery"
+        },
+        {
+          "id": 88,
+          "name": "SEA SALT FINE CRYSTALS 2",
+          "quantity": 1.0,
+          "unit_price": 1.99,
+          "total_price": 1.99,
+          "category": "grocery"
+        },
+        {
+          "id": 89,
+          "name": "R-BLUEBERRIES REALLY BIG",
+          "quantity": 1.0,
+          "unit_price": 4.99,
+          "total_price": 4.99,
+          "category": "grocery"
+        },
+        {
+          "id": 90,
+          "name": "EGGS LARGE ORGANIC OMEGA",
+          "quantity": 1.0,
+          "unit_price": 4.99,
+          "total_price": 4.99,
+          "category": "grocery"
+        },
+        {
+          "id": 91,
+          "name": "T BAG COLLAPSIBLE STAND UP",
+          "quantity": 1.0,
+          "unit_price": 3.99,
+          "total_price": 3.99,
+          "category": "grocery"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "shop_name": "Costco",
+      "date": "2023-11-07T00:00:00.000",
+      "total_amount": 31.98,
+      "currency": "USD",
+      "tax_amount": null,
+      "payment_method": null,
+      "receipt_number": null,
+      "location": null,
+      "raw_ocr_text": "Processed with Gemini Vision API - Language: en",
+      "processing_engine": "Gemini Vision (EN)",
+      "confidence_score": 0.95,
+      "language_detected": "en",
+      "items": [
+        {
+          "id": 14,
+          "name": "Regular",
+          "quantity": 11.849,
+          "unit_price": 2.699,
+          "total_price": 31.98,
+          "category": "gas"
+        }
+      ]
+    }
+  ],
+  "analytics_summary": {
+    "totalSpending": 6842.53,
+    "topShops": [
+      {
+        "shop_name": "クリエイト",
+        "total": 6279.0,
+        "count": 1
+      },
+      {
+        "shop_name": "Costco",
+        "total": 209.01999999999998,
+        "count": 2
+      },
+      {
+        "shop_name": "Costco Wholesale",
+        "total": 182.68,
+        "count": 1
+      },
+      {
+        "shop_name": "Trader Joe's",
+        "total": 93.85,
+        "count": 2
+      },
+      {
+        "shop_name": "H Mart",
+        "total": 77.98,
+        "count": 1
+      }
+    ],
+    "monthlySpending": [
+      {
+        "month": "2025-11",
+        "total": 35.37
+      },
+      {
+        "month": "2025-10",
+        "total": 255.01999999999998
+      },
+      {
+        "month": "2025-09",
+        "total": 182.68
+      },
+      {
+        "month": "2025-08",
+        "total": 6279.0
+      },
+      {
+        "month": "2024-01",
+        "total": 58.48
+      },
+      {
+        "month": "2023-11",
+        "total": 31.98
+      }
+    ],
+    "categoryBreakdown": {
+      "food": 4278.18,
+      "other": 1749.0,
+      "grocery": 186.04000000000008,
+      "retail": 146.96,
+      "beverage": 52.97,
+      "gas": 31.98
+    }
+  }
+}

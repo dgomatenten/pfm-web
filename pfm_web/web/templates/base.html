@@ -11,8 +11,14 @@
       <div class="container">
         <h1 class="brand"><a href="{{ url_for('web.index') }}">💰 PFM Web</a></h1>
         <nav class="main-nav">
+          <a href="{{ url_for('web.unified_spending') }}" class="nav-link {% if request.endpoint == 'web.unified_spending' %}active{% endif %}">
+            💰 All Spending
+          </a>
           <a href="{{ url_for('web.receipts_list') }}" class="nav-link {% if request.endpoint == 'web.receipts_list' %}active{% endif %}">
             📄 Receipts
+          </a>
+          <a href="{{ url_for('web.amazon_orders_list') }}" class="nav-link {% if request.endpoint == 'web.amazon_orders_list' %}active{% endif %}">
+            📦 Amazon
           </a>
           <a href="{{ url_for('web.analytics_dashboard') }}" class="nav-link {% if request.endpoint == 'web.analytics_dashboard' %}active{% endif %}">
             📊 Analytics

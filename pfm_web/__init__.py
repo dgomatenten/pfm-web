@@ -102,6 +102,10 @@ def _register_cli_commands(app: Flask) -> None:
     import click
     from . import amazon_importer
     from .analytics import UnifiedAnalytics
+    from .cli.email_sync_commands import init_app as init_email_sync_cli
+    
+    # Register email sync commands
+    init_email_sync_cli(app)
 
     @app.cli.command("import-receipts")
     @click.argument("path", type=click.Path(exists=True, dir_okay=False))

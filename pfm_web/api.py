@@ -9,7 +9,7 @@ from flask_restful import Api, Resource
 from sqlalchemy.exc import IntegrityError
 
 from .extensions import db
-from .models import Receipt, ReceiptLineItem, Shop, Category, User
+from .models import Receipt, ReceiptLineItem, Shop, Category, User, AmazonOrder, AmazonOrderItem
 
 api_bp = Blueprint("api", __name__, url_prefix="/api/v1")
 api = Api(api_bp)
@@ -167,9 +167,29 @@ class ReceiptListResource(Resource):
         end_date = request.args.get("end_date")
         status = request.args.get("status")
         shop_id = request.args.get("shop_id")
+        device_user_id = request.args.get("user_id")
 
         # Build query
         query = Receipt.query
+
+        # Filter by user_id if provided
+        if device_user_id:
+            user = User.query.filter_by(email=f"{device_user_id}@device").first()
+            if user:
+                query = query.filter(Receipt.user_id == user.id)
+            else:
+                # No user found, return empty result
+                return {
+                    "receipts": [],
+                    "pagination": {
+                        "page": page,
+                        "per_page": per_page,
+                        "total": 0,
+                        "pages": 0,
+                        "has_next": False,
+                        "has_prev": False,
+                    }
+                }
 
         if currency:
             query = query.filter(Receipt.currency == currency)
@@ -205,6 +225,10 @@ class ReceiptListResource(Resource):
         """Create a new receipt."""
         data = request.get_json()
         
+        print(f"[API] Received POST request to /receipts")
+        print(f"[API] Request data keys: {list(data.keys()) if data else 'None'}")
+        print(f"[API] User ID from request: {data.get('user_id') if data else 'None'}")
+        
         if not data:
             return {"error": "No data provided"}, 400
 
@@ -229,29 +253,54 @@ class ReceiptListResource(Resource):
             return {"error": "issued_at must be a valid ISO format date"}, 400
 
         try:
-            # Get or create default user (for now, single user setup)
-            user = User.query.first()
-            if not user:
-                user = User(email="default@local", password_hash="dummy", role="owner")
-                db.session.add(user)
-                db.session.flush()
+            # Get user_id from request data (device ID from mobile app)
+            device_user_id = data.get("user_id")
+            
+            if device_user_id:
+                # Get or create user with device ID as email
+                user = User.query.filter_by(email=f"{device_user_id}@device").first()
+                if not user:
+                    print(f"Creating new user for device: {device_user_id}")
+                    user = User(
+                        email=f"{device_user_id}@device",
+                        password_hash="device_auth",
+                        role="owner"
+                    )
+                    db.session.add(user)
+                    db.session.flush()
+            else:
+                # Fallback to default user for backward compatibility
+                user = User.query.first()
+                if not user:
+                    user = User(email="default@local", password_hash="dummy", role="owner")
+                    db.session.add(user)
+                    db.session.flush()
 
             # Check for duplicates using external_ref (mobile app's local ID)
             external_ref = data.get("external_ref")
             if external_ref:
+                # First check if receipt exists with ANY user (for migration from old data)
                 existing = Receipt.query.filter_by(
                     external_ref=external_ref,
                     source=data.get("source", "mobile_app")
                 ).first()
                 
                 if existing:
-                    # Return existing receipt instead of creating duplicate
+                    # If receipt exists but with wrong user, update the user_id
+                    if existing.user_id != user.id:
+                        print(f"[API] Migrating receipt {existing.id} from user {existing.user_id} to user {user.id}")
+                        existing.user_id = user.id
+                        db.session.commit()
+                    
+                    # Return existing receipt
                     return {
                         "message": "Receipt already exists",
-                        "receipt": self._serialize_receipt(existing),
+                        "receipt": ReceiptResource()._serialize_receipt(existing),
                         "duplicate": True
                     }, 200
 
+            print(f"[API] Creating receipt for user_id: {user.id}, email: {user.email}")
+            
             # Create receipt
             receipt = Receipt(
                 user_id=user.id,
@@ -295,6 +344,7 @@ class ReceiptListResource(Resource):
                     db.session.add(item)
 
             db.session.commit()
+            print(f"[API] Receipt created successfully with ID: {receipt.id}")
             return ReceiptResource()._serialize_receipt(receipt), 201
 
         except IntegrityError as e:
@@ -377,7 +427,125 @@ api.add_resource(ReceiptResource, "/receipts/<int:receipt_id>")
 api.add_resource(SyncStatusResource, "/sync/status")
 
 
+@api_bp.route("/amazon-orders")
+def get_amazon_orders_api():
+    """Get Amazon orders for syncing to mobile app."""
+    user_id = request.args.get('user_id', type=int)
+    limit = request.args.get('limit', type=int, default=1000)
+    offset = request.args.get('offset', type=int, default=0)
+    
+    query = AmazonOrder.query
+    
+    if user_id:
+        query = query.filter_by(user_id=user_id)
+    
+    # Get total count
+    total = query.count()
+    
+    # Get paginated results
+    orders = query.order_by(AmazonOrder.order_date.desc()).limit(limit).offset(offset).all()
+    
+    # Serialize orders
+    serialized_orders = []
+    for order in orders:
+        serialized_orders.append({
+            'id': order.id,
+            'order_id': order.order_number,  # Use order_number instead of order_id
+            'order_date': order.order_date.isoformat(),
+            'total_amount': float(order.total_amount),
+            'currency': order.currency,
+            'status': order.shipment_status,  # Use shipment_status instead of status
+            'user_id': order.user_id,
+            'user_email': order.user.email if order.user else None,
+            'items_count': len(order.items) if order.items else 0
+        })
+    
+    return jsonify({
+        'orders': serialized_orders,
+        'total': total,
+        'limit': limit,
+        'offset': offset,
+        'has_more': (offset + len(orders)) < total
+    })
+
+
+@api_bp.route("/amazon-orders/<int:order_id>/items")
+def get_amazon_order_items_api(order_id):
+    """Get items for a specific Amazon order."""
+    order = AmazonOrder.query.get_or_404(order_id)
+    
+    # Serialize items
+    serialized_items = []
+    for item in order.items:
+        serialized_items.append({
+            'id': item.id,
+            'title': item.item_name,  # Use item_name instead of title
+            'category': item.category.name if item.category else None,  # Get category name
+            'quantity': int(item.quantity),
+            'price': float(item.unit_price),  # Use unit_price instead of price
+            'currency': order.currency,  # Get currency from order
+            'asin': item.asin
+        })
+    
+    return jsonify({
+        'order_id': order.id,
+        'items': serialized_items,
+        'count': len(serialized_items)
+    })
+
+
 @api_bp.route("/health")
 def health_check():
     """Health check endpoint."""
     return jsonify({"status": "ok", "service": "pfm-api", "version": "1.0.0"})
+
+
+@api_bp.route("/spending/unified")
+def unified_spending_api():
+    """Get unified spending data from receipts and Amazon orders."""
+    from .services.spending_analyzer import SpendingAnalyzer
+    
+    # Get query parameters
+    user_id = request.args.get('user_id', type=int)
+    source = request.args.get('source')  # 'receipt', 'amazon', or None for all
+    currency = request.args.get('currency')
+    limit = request.args.get('limit', type=int, default=100)
+    
+    # Get unified spending data
+    items = SpendingAnalyzer.get_unified_spending(user_id=user_id, limit=limit)
+    
+    # Apply filters
+    if source:
+        items = [item for item in items if item.source == source]
+    if currency:
+        items = [item for item in items if item.currency == currency]
+    
+    # Get summary
+    summary = SpendingAnalyzer.get_spending_summary(user_id=user_id)
+    
+    # Serialize items
+    serialized_items = []
+    for item in items:
+        serialized_items.append({
+            'id': item.id,
+            'source': item.source,
+            'date': item.date.isoformat(),
+            'vendor': item.vendor,
+            'total_amount': item.total_amount,
+            'currency': item.currency,
+            'payment_method': item.payment_method,
+            'category': item.category,
+            'item_count': item.item_count,
+            'user_email': item.user_email,
+            'user_id': item.user_id,
+            'status': item.status,
+            'order_number': item.order_number,
+            'display_id': item.display_id,
+            'source_icon': item.source_icon,
+        })
+    
+    return jsonify({
+        'items': serialized_items,
+        'summary': summary,
+        'count': len(serialized_items),
+    })

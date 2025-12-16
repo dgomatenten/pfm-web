@@ -41,6 +41,7 @@ class User(db.Model, CreatedAtMixin):
     role: Mapped[str] = mapped_column(db.String(50), nullable=False, default="owner")
 
     receipts: Mapped[list["Receipt"]] = relationship(back_populates="user")
+    amazon_orders: Mapped[list["AmazonOrder"]] = relationship(back_populates="user")
     bank_accounts: Mapped[list["BankAccount"]] = relationship(back_populates="user")
     import_jobs: Mapped[list["ImportJob"]] = relationship(back_populates="submitted_by_user")
 
@@ -204,6 +205,7 @@ class AmazonOrder(db.Model, CreatedAtMixin):
     __tablename__ = "amazon_orders"
 
     id: Mapped[int] = mapped_column(primary_key=True)
+    user_id: Mapped[Optional[int]] = mapped_column(db.ForeignKey("users.id"))
     order_number: Mapped[str] = mapped_column(db.String(100), unique=True, nullable=False)
     order_date: Mapped[datetime] = mapped_column(db.DateTime, nullable=False)
     total_amount: Mapped[float] = mapped_column(db.Float, nullable=False)
@@ -213,6 +215,7 @@ class AmazonOrder(db.Model, CreatedAtMixin):
     raw_payload: Mapped[Optional[str]] = mapped_column(db.Text)
     receipt_id: Mapped[Optional[int]] = mapped_column(db.ForeignKey("receipts.id"))
 
+    user: Mapped[Optional[User]] = relationship(back_populates="amazon_orders")
     receipt: Mapped[Optional[Receipt]] = relationship(back_populates="amazon_orders")
     items: Mapped[list["AmazonOrderItem"]] = relationship(back_populates="order", cascade="all, delete-orphan")
 

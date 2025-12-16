@@ -9,11 +9,25 @@
   </div>
   
   <div class="feature-grid">
+    <a href="{{ url_for('web.unified_spending') }}" class="feature-card highlight">
+      <div class="feature-icon">💰</div>
+      <h3>All Spending</h3>
+      <p>Unified view of receipts and Amazon orders</p>
+      <div class="feature-action">View All Spending →</div>
+    </a>
+    
     <a href="{{ url_for('web.receipts_list') }}" class="feature-card">
       <div class="feature-icon">📄</div>
       <h3>Receipts</h3>
       <p>View and manage all your receipts in one place</p>
       <div class="feature-action">Browse Receipts →</div>
+    </a>
+    
+    <a href="{{ url_for('web.amazon_orders_list') }}" class="feature-card">
+      <div class="feature-icon">📦</div>
+      <h3>Amazon Orders</h3>
+      <p>Track your Amazon purchases and order history</p>
+      <div class="feature-action">View Orders →</div>
     </a>
     
     <a href="{{ url_for('web.analytics_dashboard') }}" class="feature-card">
@@ -23,7 +37,7 @@
       <div class="feature-action">View Analytics →</div>
     </a>
     
-    <a href="{{ url_for('web.receipt_create') }}" class="feature-card highlight">
+    <a href="{{ url_for('web.receipt_create') }}" class="feature-card">
       <div class="feature-icon">➕</div>
       <h3>Add Receipt</h3>
       <p>Manually enter a new receipt with line items</p>
